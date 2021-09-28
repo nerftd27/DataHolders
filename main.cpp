@@ -11,7 +11,15 @@ int main()
     root->initHolder();
     CreateTree(root);
     std::cout<<"root: "<<*root;
-    PrintTree(root);
+    std::ofstream fout(TREE_FILENAME);
+    PrintTree(root,fout);
+
+
+
+
+
+
+
     DeleteTree(&root);
     std::cout<<"\nfinish\n";
     char user_command;

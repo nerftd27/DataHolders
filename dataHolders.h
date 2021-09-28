@@ -7,6 +7,13 @@ enum class Holders {
     BASE,INT,CHAR_ARR,DOUBLE
 };
 
+union union_data {
+    int32_t i;
+    double d;
+    char intToChar[sizeof (int32_t)/sizeof (char)];     //by the right its need roundUp dividing
+    double doubleToChar[sizeof(double)/sizeof(char)];
+};
+
 class BaseHolder
 {
     //void* data;

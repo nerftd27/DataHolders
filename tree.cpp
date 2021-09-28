@@ -6,7 +6,7 @@ treeNode::treeNode()    //allocation memory realized at treeNode::initBranchs()
 
 treeNode::~treeNode() {
     if (!branchs.empty()) {
-        for(int i=0;i<branchCount;i++) {
+        for(int i=0;i<branchs.size();i++) {
             delete branchs[i];
             branchs[i]=nullptr;
         }
@@ -51,6 +51,7 @@ void treeNode::initBranchs() {
     }
 }
 
+//Tree funcs
 void CreateTree(treeNode* root) {
     static int tree_depth=0;
     tree_depth++;
@@ -65,7 +66,7 @@ void CreateTree(treeNode* root) {
     tree_depth--;
 }
 
-void PrintTree(treeNode* node) {
+void PrintTree(treeNode* node, std::ofstream& out) {
     static int tab=0;                       //for depth tree visualization
     tab++;
     if (tab>TREE_DEPTH) return;
@@ -73,7 +74,8 @@ void PrintTree(treeNode* node) {
         for(int k=0;k<node->branchCount;k++) {
              for(int i=0;i<=tab;i++) std::cout<<' ';
              std::cout<<*node->branchs[k];
-             PrintTree(node->branchs[k]);
+             out<<*node->branchs[k];
+             PrintTree(node->branchs[k], out);
              tab--;
         }
     }
@@ -90,6 +92,7 @@ void DeleteTree(treeNode** root)
     *root=nullptr;
 }
 
+// input/output operators override
 std::ostream& operator<<(std::ostream& out, treeNode& nod) {
     if(nod.typeHolder==Holders::INT) {
         out.precision(0);
@@ -107,4 +110,20 @@ std::ostream& operator<<(std::ostream& out, treeNode& nod) {
     return out;
 }
 
-
+std::ofstream& operator<<(std::ofstream& out, treeNode& nod) {
+    union_data buf;
+    if(nod.typeHolder==Holders::INT) {
+        out<<0<<DIVIDER;
+        out<<(dynamic_cast<IntHolder&>(*nod.holder)).getData()<<DIVIDER;
+    }
+    if(nod.typeHolder==Holders::CHAR_ARR) {
+        out<<1<<DIVIDER;
+        out<<(dynamic_cast<CharArrayHolder&>(*nod.holder)).getData()<<DIVIDER;
+    }
+    if(nod.typeHolder==Holders::DOUBLE) {
+        out<<2<<DIVIDER;
+        out<<(dynamic_cast<DoubleHolder&>(*nod.holder)).getData()<<DIVIDER;
+    }
+    out<<nod.branchCount<<std::endl;
+    return out;
+}
