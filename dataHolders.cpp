@@ -28,9 +28,8 @@ char* CharArrayHolder::getData() {
 void CharArrayHolder::setData(char *p) {
     //warnign - no check lenght p
     for(int i=0;i<10;i++) {
-        data[i]=*(p+i);
+        data[i]=p[i];
     }
-
 }
 
 //DoubleHolder
